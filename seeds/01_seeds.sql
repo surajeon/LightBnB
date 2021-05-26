@@ -19,8 +19,8 @@ VALUES(1 ,'Speed lamp', description , 'https://images.pexels.com/photos/2086676/
 (2, 'Habit mix', description , 'https://images.pexels.com/photos/2080018/pexels-photo-2080018.jpeg?auto=compress&cs=tinysrgb&h=350' , 'https://images.pexels.com/photos/2080018/pexels-photo-2080018.jpeg', 46058, 0, 5, 6, 'Canada', '1650 Hejto Center', 'Genwezuj', 'Newfoundland And Labrador' , 44583, true
 );
 
-INSERT IN property_reviews (guest_id, property_id, reservation_id, rating, message) (
-  VALUES(2,5,10,3,messages),
-  (1,4,1,4,messages),
-  (8,1,2,4,messages)
+INSERT INTO property_reviews (guest_id, property_id, reservation_id, rating, message) (
+VALUES(2,5,10,3,messages),
+(1,4,1,4,messages),
+(8,1,2,4,messages)
 );
