@@ -6,6 +6,7 @@ module.exports = function(router, database) {
   router.post('/', (req, res) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, 12);
+    // Add some code here if you want to check if the email/user exists...
     database.addUser(user)
     .then(user => {
       if (!user) {
