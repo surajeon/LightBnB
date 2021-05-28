@@ -67,13 +67,11 @@ exports.getUserWithId = getUserWithId;
  * @return {Promise<{}>} A promise to the user.
  */
 const addUser = function(user) {
-  console.log('user:', user);
   return pool.query(`
   INSERT INTO users (name, email, password)
   VALUES ($1, $2, $3) RETURNING *;
   `,[user.name, user.email, user.password])
   .then((result) => {
-    console.log(result)
     return result.rows[0];
   })
   .catch((err) => {
@@ -95,7 +93,6 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function(guest_id, limit = 10) {
-  console.log('guest_id:', guest_id)
   return pool.query (`
     SELECT *, avg(property_reviews.rating) as average_rating
     FROM reservations
@@ -106,7 +103,6 @@ const getAllReservations = function(guest_id, limit = 10) {
     LIMIT $2;
   `,[guest_id, limit])
   .then((result) => {
-    console.log(result.rows);
     return result.rows;
   })
   .catch((err) => {
@@ -172,7 +168,7 @@ const getAllProperties = function(options, limit = 10) {
     LIMIT $${queryParams.length};
     `;
   
-    console.log(queryString, queryParams);
+    // console.log(queryString, queryParams);
   
     return pool.query(queryString, queryParams).then((res) => res.rows);
 
@@ -193,11 +189,36 @@ exports.getAllProperties = getAllProperties;
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function(property) {
-  const propertyId = Object.keys(properties).length + 1;
-  property.id = propertyId;
-  properties[propertyId] = property;
-  return Promise.resolve(property);
 
+  let queryString = `
+  INSERT INTO properties ( owner_id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, street, city, province, post_code, country, parking_spaces, number_of_bathrooms, number_of_bedrooms)`;
+
+  queryString += `
+  VALUES (
+    ${property.owner_id},
+    '${property.title}',
+    '${property.description}',
+    '${property.thumbnail_photo_url}',
+    '${property.cover_photo_url}',
+    '${property.cost_per_night}',
+    '${property.street}',
+    '${property.city}',
+    '${property.province}',
+    '${property.post_code}',
+    '${property.country}',
+    ${property.parking_spaces},
+    ${property.number_of_bathrooms},
+    ${property.number_of_bedrooms}) RETURNING *;
+  `;
+
+  return pool.query(queryString).then((res) => res.rows);
   
 }
 exports.addProperty = addProperty;
+
+
+  // const propertyId = Object.keys(properties).length + 1;
+  // property.id = propertyId;
+  // properties[propertyId] = property;
+  // return Promise.resolve(property);
+  // console.log("HERE", queryString);
